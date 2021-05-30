@@ -9,18 +9,29 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Task;
 use App\Repositories\Task\Respository;
+use App\Repositories\TaskRepository;
 
 class TaskController extends Controller
 {
+
+    /**
+     *タスクリポジトリーインスタンス 
+     * 
+     * @var TaskRepository
+     */
+    protected $tasks;
+
     /**
      * 新しいコントローラーインスタンスの生成
      * 
      * @return void
-     * 
+     * @param TaskRepository $tasks
      */
-    public function __construct()
+    public function __construct(TaskRepository $tasks)
     {
         $this->middleware('auth');
+
+        $this->tasks = $tasks;
     }
 
 
@@ -40,7 +51,9 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        return view('task.index');
+        return view('tasks.index', [
+            'tasks' => $this->tasks->forUser($request->user()),
+        ]);
     }
 
     /**
@@ -57,7 +70,7 @@ class TaskController extends Controller
 
         //タスクの処理作成
         $request->user()->tasks()->create([
-            'name' => $request->$name,
+            'name' => $request->name,
         ]);
 
         return redirect('/tasks');
