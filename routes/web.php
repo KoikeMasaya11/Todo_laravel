@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,6 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/tasks', 'TaskController@index');
-Route::get('/task', 'TaskController@store');
-Route::get('/task/{task}', 'TaskController@destroy');
+Route::get('/tasks', [App\Http\Controllers\TaskController::class, 'index'])->name('tasks');
+Route::post('/task', [App\Http\Controllers\TaskController::class, 'store'])->name('task');
+Route::delete('/task/{task}', [App\Http\Controllers\TaskController::class, 'destroy'])->name('/task/{task}');

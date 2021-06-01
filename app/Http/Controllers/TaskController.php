@@ -76,4 +76,19 @@ class TaskController extends Controller
         return redirect('/tasks');
     }
 
+    /**
+     * 指定したタスクの削除
+     * 
+     * @param Request $request
+     * @param Task $tasks
+     * @param Response
+     */
+    public function destroy(Request $request, Task $task)
+    {
+        $this->authorize('destroy', $task);
+
+        $task->delete();
+
+        return redirect('/tasks');
+    }
 }
